@@ -1,0 +1,55 @@
+//法线贴图
+Shader "Custom/Normal Mapping"{
+	Properties{
+		_MainTx ("Base (RGB)",2D) = "white"{}
+		
+		//1 声明并加入一个显示名称为Bump的贴图
+		_Bump ("Bump",2D) = "bump" {}
+	
+	}
+	SubShader{
+		Tags {"RenderType"="Opaque" }
+		LOD 200
+		
+		CGPROGRAM
+		#progma surface surf Lambert
+		
+		sampler2D _MainTx;
+		
+		//2 为了能在CG程序中使用这张贴图 必须加入一个sample
+		sampler2D _Bump;
+		
+		struct Input{
+			float2 uv_MainTex;
+			
+			//3 获得Bump的uv信息作为输入
+			float2 uv_Bump;
+		
+		};
+	
+		void surf(Input In,inout SurfaceOutput o){
+		
+		half4 c = tex2D (_MainTx,In.uv_MainTex);
+		
+		//4 从法线图中提取法线信息 并将其赋值与相应点的输出的Normal属性
+		//。UnpackNormal是定义在UnityCG.cginc文件中的方法，这个文件中包含了一系列常用的CG变量以及方法。
+		//UnpackNormal接受一个fixed4的输入，并将其转换为所对应的法线值（fixed3）。在解包得到这个值之后，将其赋给输出的Normal，就可以参与到光线运算中完成接下来的渲染工作了。
+		o.Normal=UnpackNormal(tex2D(_Bump,IN.uv_Bump));
+		
+		o.Albedo=c.rgb;
+		o.Alpha = c.a;
+		}
+		ENDCG
+	}
+	FallBack "Diffuse"
+}
+/*
+struct SurfaceOutput {
+    half3 Albedo;     //像素的颜色
+    half3 Normal;     //像素的法向值
+    half3 Emission;   //像素的发散颜色
+    half Specular;    //像素的镜面高光
+    half Gloss;       //像素的发光强度
+    half Alpha;       //像素的透明度
+};
+*/
