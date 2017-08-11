@@ -60,11 +60,11 @@ void circlePlotPoints(GLint xc, GLint yc, screenPt circpt) {
 	setPixel(xc + circpt.getx(), yc - circpt.gety());
 	setPixel(xc - circpt.getx(), yc - circpt.gety());
 
-	setPixel(xc + circpt.getx(), yc + circpt.gety());
-	setPixel(xc - circpt.getx(), yc + circpt.gety());
+	setPixel(xc + circpt.gety(), yc + circpt.getx());
+	setPixel(xc - circpt.gety(), yc + circpt.getx());
 
-	setPixel(xc + circpt.getx(), yc - circpt.gety());
-	setPixel(xc - circpt.getx(), yc - circpt.gety());
+	setPixel(xc + circpt.gety(), yc - circpt.getx());
+	setPixel(xc - circpt.gety(), yc - circpt.getx());
 }
 void ellipseMidpoint(int xCenter, int yCenter, int Rx, int Ry) {
 	int Rx2 = Rx*Rx;
